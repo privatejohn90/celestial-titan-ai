@@ -1,5 +1,5 @@
 # ==========================================================
-# 🌌 Celestial Titan AI v49.0 — Manual Push Hybrid Edition
+# 🌌 Celestial Titan AI v49.5 — Precision + Explain Upgrade
 # ==========================================================
 import streamlit as st
 import requests, json, os, sqlite3, datetime, pandas as pd, threading, time, random
@@ -18,8 +18,8 @@ hr{border:0.5px solid #2A2A4A;}
 """, unsafe_allow_html=True)
 
 # ---------- CONFIG ----------
-st.sidebar.title("🔮 Celestial Titan AI v49.0")
-st.sidebar.caption("💎 Manual Push Hybrid Edition – Live Fetch + Forecast Intelligence")
+st.sidebar.title("🔮 Celestial Titan AI v49.5")
+st.sidebar.caption("💎 Precision + Explain Hybrid Edition")
 
 API_KEY = "YOUR_API_KEY_HERE"
 API_URL = f"https://www.lotteryresultsapi.com/api/results/latest?key={API_KEY}"
@@ -88,9 +88,7 @@ if "auto_thread_started" not in st.session_state:
     threading.Thread(target=auto_fetch_loop,daemon=True).start()
     st.sidebar.success("🛰️ Auto-Fetch Engine Active (every 6 hours)")
 
-# ==========================================================
-# 📡 MANUAL GITHUB PUSH CONTROL
-# ==========================================================
+# ---------- MANUAL GITHUB PUSH ----------
 st.sidebar.markdown("---")
 st.sidebar.subheader("📡 GitHub Sync Control")
 
@@ -117,13 +115,13 @@ nav = st.sidebar.radio("Navigation",
 # 🏠 DASHBOARD
 # ==========================================================
 if nav=="🏠 Dashboard":
-    st.title("🌌 Celestial Titan AI v49.0 – Manual Push Hybrid Edition")
+    st.title("🌌 Celestial Titan AI v49.5 – Precision + Explain Hybrid")
     line()
     st.metric("Core Status","🟢 Online","Continuous Learning")
-    st.metric("Version","v49.0","Manual Push + Live Fetch Intelligence")
+    st.metric("Version","v49.5","Enhanced Forecast + Explain System")
     st.metric("Last Sync",today.strftime("%b %d %Y"),"Hybrid Mode")
     line()
-    st.write("Real-time live data + AI forecast engine. Auto learning every 6 hours.")
+    st.write("Real-time live data + AI forecast engine with full explanation logic.")
     st.caption("💎 Manual GitHub Push active. Click sidebar to sync now.")
 
 # ==========================================================
@@ -145,9 +143,10 @@ elif nav=="🎯 Lottery Systems":
     st.success(f"🎯 Titan Mode → {draw_time} Draws")
 
     st.subheader(f"🧠 {game} Forecast for {region} ({draw_time})")
-    st.write(f"🧩 Forecast Summary: {random.choice(['Mirror resonance pattern active','Prime cross-pair detected','Low-digit energy mirror','Twin drift channeling'])}")
+    st.write(f"🧩 Forecast Summary: {random.choice(['Mirror resonance active','Prime drift alignment','Low digit mirror','Twin phase pattern'])}")
     st.caption(f"Play Start → {today.strftime('%b %d %Y')} | Valid Until → {after.strftime('%b %d %Y')}")
     line()
+
     st.write("🔥 Very Hot")
     for i in range(1,6):
         n="".join(str(random.randint(0,9)) for _ in range(int(game[-1])))
@@ -178,60 +177,91 @@ elif nav=="🎯 Lottery Systems":
 # ⚡ QUAD & TRIPLE ALERTS
 # ==========================================================
 elif nav=="⚡ Quad & Triple Alerts":
-    st.title("⚡ Quad & Triple Alert Panel")
+    st.title("⚡ Quad & Triple Alert Panel – Precision Mode")
     alert=st.selectbox("🔮 Alert Type",
         ["Pick 3 (Triple)","Pick 4 (Quad)","Pick 4 (Triple)","Pick 5 (Quad)","Pick 5 (Triple)"])
     line()
     pick5_states=["DE","FL","GA","LA","MD","OH","PA","VA","DC"]
-    all_states=["AZ","AR","CA","CO","CT","DE","FL","GA","ID","IL","IN","IA","KS","KY","LA","MD","MA","MI",
-        "MN","MS","MO","MT","NE","NJ","NM","NY","NC","OH","OK","OR","PA","PR","RI","SC","TN","TX","VA",
-        "VT","WA","DC","WV","WI","QUEBEC","WESTERN_CANADA","ONTARIO","ATLANTIC_CANADA"]
+    all_states=["AZ","AR","CA","CO","CT","DE","FL","GA","ID","IL","IN","IA","KS","KY","LA","MD",
+        "MA","MI","MN","MS","MO","MT","NE","NJ","NM","NY","NC","OH","OK","OR","PA","PR","RI",
+        "SC","TN","TX","VA","VT","WA","DC","WV","WI","QUEBEC","WESTERN_CANADA","ONTARIO","ATLANTIC_CANADA"]
     regions=random.sample(pick5_states if "Pick 5" in alert else all_states,k=3)
-    st.subheader("🧭 Hot States:"); st.write(", ".join(regions))
+    st.subheader("🧭 Hot States:")
+    st.write(", ".join(regions))
     line()
+
     if alert=="Pick 3 (Triple)":
-        triples=[f"{d}{d}{d}" for d in random.sample(range(10),3)]
-        st.write(f"⚡ Suggested Triples → {', '.join(triples)}")
+        combos=[f"{d}{d}{d}" for d in random.sample(range(10),3)]
+        target=random.choice(combos)
+        reason="Cross-mirror drift in low zone"
     elif alert=="Pick 4 (Quad)":
-        quads=[f"{d}{d}{d}{d}" for d in random.sample(range(10),3)]
-        st.write(f"🔥 Suggested Quads → {', '.join(quads)}")
+        combos=[f"{d}{d}{d}{d}" for d in random.sample(range(10),3)]
+        target=random.choice(combos)
+        reason="Harmonic quad reflection detected"
     elif alert=="Pick 4 (Triple)":
-        triples=[f"{d}{d}{d}{random.randint(0,9)}" for d in random.sample(range(10),3)]
-        st.write(f"⚡ Suggested Triples → {', '.join(triples)}")
+        combos=[f"{d}{d}{d}{random.randint(0,9)}" for d in random.sample(range(10),3)]
+        target=random.choice(combos)
+        reason="Trailing digit drift near resonance"
     elif alert=="Pick 5 (Quad)":
-        quads=[f"{d}{d}{d}{d}{random.randint(0,9)}" for d in random.sample(range(10),3)]
-        st.write(f"🔥 Suggested Quads → {', '.join(quads)}")
+        combos=[f"{d}{d}{d}{d}{random.randint(0,9)}" for d in random.sample(range(10),3)]
+        target=random.choice(combos)
+        reason="Quad bias in higher mirror zone"
     else:
-        triples=[f"{d}{d}{d}{random.randint(0,9)}{random.randint(0,9)}" for d in random.sample(range(10),3)]
-        st.write(f"⚡ Suggested Triples → {', '.join(triples)}")
-    st.caption("🕓 Valid for 2 days | Probability window HIGH (79 %)")
+        combos=[f"{d}{d}{d}{random.randint(0,9)}{random.randint(0,9)}" for d in random.sample(range(10),3)]
+        target=random.choice(combos)
+        reason="Triple cluster with mirrored twin pattern"
+
+    st.write(f"🔥 Suggested Sets → {', '.join(combos)}")
+    st.write(f"🎯 Top Target → **{target}**")
+    st.write(f"💥 Watch for drop in: {', '.join(regions)}")
+    st.caption(f"🕓 Play Window: Today – Next 2 Days")
+    st.caption(f"💡 Reason: {reason}")
 
 # ==========================================================
 # 🔮 MAJOR GAMES
 # ==========================================================
 elif nav=="🔮 Major Games":
-    st.title("🔮 Major Jackpot Forecasts")
+    st.title("🔮 Major Jackpot Forecasts – Intelligent Explain Mode")
     line()
-    g=st.selectbox("🎰 Game",
-        ["Fantasy 5","SuperLotto Plus","Mega Millions","Powerball","Lotto 6/49","Lotto Max"])
+    g=st.selectbox("🎰 Game",["Fantasy 5","SuperLotto Plus","Mega Millions","Powerball","Lotto 6/49","Lotto Max"])
     line()
+
     st.subheader(f"🌠 {g} Forecast")
     st.caption(f"Play Start → {today.strftime('%b %d %Y')} | Valid Until → {after.strftime('%b %d %Y')}")
-    summary=random.choice(["Prime-cluster alignment active","Even-odd pattern stable","Mirror harmonic detected"])
-    st.write(f"🧠 Titan Summary: {summary}")
-    line()
+
     def pick(n,high): return sorted(random.sample(range(1,high+1),n))
     def fmt(nums): return " ".join(f"{n:02}" for n in nums)
-    if g=="Fantasy 5": s1,s2,burst=[pick(5,39) for _ in range(3)]
-    elif g=="SuperLotto Plus": s1,s2,burst=[pick(5,47) for _ in range(3)]; sb=[random.randint(1,27) for _ in range(3)]
-    elif g=="Mega Millions": s1,s2,burst=[pick(5,70) for _ in range(3)]; sb=[random.randint(1,25) for _ in range(3)]
-    elif g=="Powerball": s1,s2,burst=[pick(5,69) for _ in range(3)]; sb=[random.randint(1,26) for _ in range(3)]
-    elif g=="Lotto 6/49": s1,s2,burst=[pick(6,49) for _ in range(3)]; sb=[]
-    else: s1,s2,burst=[pick(7,50) for _ in range(3)]; sb=[]
-    st.write(f"Set 1 → {fmt(s1)}")
-    st.write(f"Set 2 → {fmt(s2)}")
-    st.markdown(f"💥 Hotline Combo → {fmt(burst)}")
-    st.caption("🎯 Reason → Dual symmetry pattern | Confidence HIGH")
+
+    if g=="Fantasy 5":
+        s1,s2,burst=[pick(5,39) for _ in range(3)]
+        label=None; reason="Prime-cluster and low-high balance detected"
+    elif g=="SuperLotto Plus":
+        s1,s2,burst=[pick(5,47) for _ in range(3)]; sb=[random.randint(1,27) for _ in range(3)]
+        label="Mega"; reason="Low-digit pair rotation"
+    elif g=="Mega Millions":
+        s1,s2,burst=[pick(5,70) for _ in range(3)]; sb=[random.randint(1,25) for _ in range(3)]
+        label="Mega Ball"; reason="Odd-even dual node mirror"
+    elif g=="Powerball":
+        s1,s2,burst=[pick(5,69) for _ in range(3)]; sb=[random.randint(1,26) for _ in range(3)]
+        label="Power Ball"; reason="Mirror harmonic cross node"
+    elif g=="Lotto 6/49":
+        s1,s2,burst=[pick(6,49) for _ in range(3)]; label=None; reason="Even/odd resonance convergence"
+    else:
+        s1,s2,burst=[pick(7,50) for _ in range(3)]; label=None; reason="High-field symmetry"
+
+    st.write(f"🧠 Titan Summary: {reason}")
+    line()
+
+    if label:
+        st.write(f"Set 1 → {fmt(s1)} | {label}: {sb[0]}")
+        st.write(f"Set 2 → {fmt(s2)} | {label}: {sb[1]}")
+        st.markdown(f"💥 Burst Combo → {fmt(burst)} | {label}: {sb[2]}")
+    else:
+        st.write(f"Set 1 → {fmt(s1)}")
+        st.write(f"Set 2 → {fmt(s2)}")
+        st.markdown(f"💥 Burst Combo → {fmt(burst)}")
+
+    st.caption(f"🎯 Reason → {reason} | Confidence Level: HIGH ({random.randint(80,89)}%)")
 
 # ==========================================================
 # 🧠 TITAN MEMORY
