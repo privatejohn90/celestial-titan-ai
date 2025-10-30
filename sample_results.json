@@ -1,0 +1,40 @@
+{
+  "results": [
+    {
+      "draw_date": "2025-10-28T13:00:00",
+      "state": "FL",
+      "game_name": "Pick 3 Midday",
+      "numbers": "334",
+      "status": "✅ Learned"
+    },
+    {
+      "draw_date": "2025-10-28T20:00:00",
+      "state": "GA",
+      "game_name": "Pick 4 Evening",
+      "numbers": "2511",
+      "status": "✅ Learned"
+    },
+    {
+      "draw_date": "2025-10-28T21:00:00",
+      "state": "OH",
+      "game_name": "Pick 5 Evening",
+      "numbers": "48604",
+      "status": "✅ Learned"
+    },
+    {
+      "draw_date": "2025-10-28T21:00:00",
+      "state": "CA",
+      "game_name": "Fantasy 5",
+      "numbers": "07 09 14 21 35",
+      "status": "✅ Learned"
+    },
+    {
+      "draw_date": "2025-10-28T22:00:00",
+      "state": "TX",
+      "game_name": "Pick 3 Evening",
+      "numbers": "744",
+      "status": "✅ Learned"
+    }
+  ]
+}
+
