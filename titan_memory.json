@@ -1,42 +1,82 @@
 [
   {
-    "date": "2025-10-28T13:00:00",
-    "state": "FL",
-    "game": "Pick 3 Midday",
-    "draw_time": "Midday",
-    "result": "334",
-    "status": "\u2705 Learned"
-  },
-  {
-    "date": "2025-10-28T20:00:00",
+    "date": "2025-10-30 00:00",
     "state": "GA",
-    "game": "Pick 4 Evening",
+    "game": "Pick 3",
     "draw_time": "Evening",
-    "result": "2511",
-    "status": "\u2705 Learned"
+    "result": "03886",
+    "status": "Simulated"
   },
   {
-    "date": "2025-10-28T21:00:00",
-    "state": "OH",
-    "game": "Pick 5 Evening",
+    "date": "2025-10-30 00:00",
+    "state": "GA",
+    "game": "Pick 3",
     "draw_time": "Evening",
-    "result": "48604",
-    "status": "\u2705 Learned"
+    "result": "91937",
+    "status": "Simulated"
   },
   {
-    "date": "2025-10-28T21:00:00",
-    "state": "CA",
-    "game": "Fantasy 5",
-    "draw_time": "Evening",
-    "result": "07 09 14 21 35",
-    "status": "\u2705 Learned"
+    "date": "2025-10-30 00:00",
+    "state": "FL",
+    "game": "Pick 3",
+    "draw_time": "Midday",
+    "result": "58512",
+    "status": "Simulated"
   },
   {
-    "date": "2025-10-28T22:00:00",
-    "state": "TX",
-    "game": "Pick 3 Evening",
+    "date": "2025-10-30 00:00",
+    "state": "FL",
+    "game": "Pick 4",
     "draw_time": "Evening",
-    "result": "744",
-    "status": "\u2705 Learned"
+    "result": "71305",
+    "status": "Simulated"
+  },
+  {
+    "date": "2025-10-30 00:00",
+    "state": "GA",
+    "game": "Pick 4",
+    "draw_time": "Evening",
+    "result": "93746",
+    "status": "Simulated"
+  },
+  {
+    "date": "2025-10-30 00:00",
+    "state": "FL",
+    "game": "Pick 3",
+    "draw_time": "Evening",
+    "result": "17546",
+    "status": "Simulated"
+  },
+  {
+    "date": "2025-10-30 00:00",
+    "state": "FL",
+    "game": "Pick 3",
+    "draw_time": "Midday",
+    "result": "93916",
+    "status": "Simulated"
+  },
+  {
+    "date": "2025-10-30 00:00",
+    "state": "FL",
+    "game": "Pick 4",
+    "draw_time": "Evening",
+    "result": "79801",
+    "status": "Simulated"
+  },
+  {
+    "date": "2025-10-30 00:00",
+    "state": "FL",
+    "game": "Pick 5",
+    "draw_time": "Evening",
+    "result": "29439",
+    "status": "Simulated"
+  },
+  {
+    "date": "2025-10-30 00:00",
+    "state": "FL",
+    "game": "Pick 3",
+    "draw_time": "Midday",
+    "result": "50976",
+    "status": "Simulated"
   }
 ]
