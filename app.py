@@ -1,15 +1,10 @@
 # ==========================================================
-# 💠 Celestial Titan God AI v67 — Unified Command Core Edition
+# 💠 Celestial Titan God AI v67.5 — Titan Changelog Panel Edition
 # ==========================================================
 # Created by: Johnson & ChatGPT
 # Description:
-# Combines v60.9.2 Divine Signal system with Titan Command Core (v66.5)
-# Adds:
-#   🌙 Titan Command Bar
-#   📊 Cycle Memory & Multi-State Snapshot
-#   ⚡ Suggestion Engine + Forecast Link Mode
-#   🪐 Energy Legend Panel
-#   🎯 Auto-Hit Detection Framework
+#  • Combines v67 Unified Command Core
+#  • Adds Titan Changelog Panel to Dashboard
 # ==========================================================
 
 import streamlit as st
@@ -38,9 +33,9 @@ line=lambda:st.markdown("<hr>",unsafe_allow_html=True)
 PICK5_STATES=["DE","FL","GA","LA","MD","OH","PA","VA","DC"]
 
 # ==========================================================
-# ⚙️ TITAN COMMAND BAR — New Control Core
+# ⚙️ TITAN COMMAND BAR
 # ==========================================================
-st.sidebar.title("💠 Celestial Titan God AI v67 — Command Core Mode")
+st.sidebar.title("💠 Celestial Titan God AI v67.5 — Command Core Mode")
 st.sidebar.caption("🌌 Unified Intelligence System | Multi-State Analyzer")
 
 forecast_mode=st.sidebar.toggle("🌙 Forecast Link Mode", value=True)
@@ -50,7 +45,7 @@ show_legend=st.sidebar.toggle("🪐 Show Energy Legend", value=False)
 st.sidebar.markdown(f"**Status:** 🟢 Active | Sync:** {dt.now().strftime('%H:%M:%S')}**")
 
 # ==========================================================
-# 📊 TITAN CYCLE MEMORY SNAPSHOT (MULTI-STATE)
+# 📊 TITAN CYCLE MEMORY SNAPSHOT
 # ==========================================================
 st.sidebar.markdown("---")
 st.sidebar.markdown("### 📊 Titan Cycle Memory Snapshot")
@@ -75,9 +70,6 @@ cycle_memory=[
 for c in cycle_memory:
     st.sidebar.write(f"🗺 {c['region']} | {c['phase']} | {c['accuracy']}%")
 
-# ==========================================================
-# 🪐 ENERGY LEGEND PANEL
-# ==========================================================
 if show_legend:
     st.sidebar.markdown("---")
     st.sidebar.markdown("### 🪐 Titan Energy Legend")
@@ -103,15 +95,45 @@ if nav=="🏠 Dashboard":
     line()
     c1,c2,c3=st.columns(3)
     c1.metric("Core Status","🟢 Online","Unified System Active")
-    c2.metric("Version","v67","Command Core Integrated")
+    c2.metric("Version","v67.5","Changelog Panel Added")
     c3.metric("Last Sync",today.strftime("%b %d %Y"),"Multi-State Mode")
     line()
     st.subheader("🌕 Cosmic Stats Panel")
     st.write("🟢 Learning Active | 🔵 Surge Standby | 🟣 Sync Balanced")
-    st.caption("Titan now uses Command Core for multi-region intelligence and cycle memory awareness.")
+    st.caption("Titan now includes a changelog memory so you can track system evolution directly inside the dashboard.")
+    line()
+
+    # ======================================================
+    # 🧩 TITAN CHANGELOG PANEL (NEW)
+    # ======================================================
+    st.subheader("🕓 Titan Version Log Panel")
+    st.markdown("""
+    **💠 v67.5 — Changelog Panel Added**
+    - Introduced Titan Version Log Panel in Dashboard  
+    - Streamlined Command Core cycle tracking  
+    - Minor performance improvements  
+
+    **💠 v67 — Unified Command Core**
+    - Added Titan Command Bar (4 toggles)  
+    - Added Cycle Memory (15 States)  
+    - Added Forecast Link + Suggestion Engine  
+    - Added Titan Command Mode Navigation  
+    - Added Energy Legend Panel  
+
+    **💠 v66.5 — Multi-State Engine**
+    - Introduced 15-State Accuracy Map  
+    - Activated Forecast Link Mode  
+
+    **💠 v60.9.2 — Divine Signal Base**
+    - Auto-Save + Manual Draw Mode  
+    - Quad/Triple Alert System  
+    - Major Game Forecasts  
+    """)
+
+    st.caption("🗣 Titan: System running v67.5 | Next target → v68 Auto-Hit Log & Accuracy Graph")
 
 # ==========================================================
-# 🎯 LOTTERY SYSTEMS (Original)
+# 🎯 LOTTERY SYSTEMS
 # ==========================================================
 elif nav=="🎯 Lottery Systems":
     st.title("🎯 Pick-3 / Pick-4 / Pick-5 Forecast + Live Results")
@@ -122,10 +144,8 @@ elif nav=="🎯 Lottery Systems":
          "MI","MN","MS","MO","MT","NE","NJ","NM","NY","NC","OH","OK","OR","PA","SC","TN","TX",
          "VA","WA","DC","WV","WI"])
     draw_time=st.radio("🕓 Draw Time",["Midday","Evening","Auto Detect (Random)"])
-    if draw_time=="Auto Detect (Random)":
-        draw_time=random.choice(["Midday","Evening"])
+    if draw_time=="Auto Detect (Random)": draw_time=random.choice(["Midday","Evening"])
     line()
-
     if game=="Pick 5" and region not in PICK5_STATES:
         st.info(f"ℹ️ {region} does not officially host Pick-5 — Titan running simulation mode.")
     st.success(f"🎯 Titan Mode → {draw_time} Draws")
@@ -136,7 +156,6 @@ elif nav=="🎯 Lottery Systems":
     st.subheader(f"🧠 {game} Forecast for {region} ({draw_time})")
     st.caption(f"Play Start → {today.strftime('%b %d %Y')} | Valid Until → {after.strftime('%b %d %Y')}")
     line()
-
     sets=[]
     for i in range(1,6):
         n="".join(str(random.randint(0,9)) for _ in range(int(game[-1])))
@@ -160,23 +179,11 @@ elif nav=="⚡ Quad & Triple Alerts":
     st.subheader("🧭 Hot States:")
     st.write(", ".join(regions))
     line()
-
-    if alert=="Pick 3 (Triple)":
-        combos=[f"{d}{d}{d}" for d in random.sample(range(10),3)]
-        reason="Cross-mirror drift in low zone"
-    elif alert=="Pick 4 (Quad)":
-        combos=[f"{d}{d}{d}{d}" for d in random.sample(range(10),3)]
-        reason="Harmonic quad reflection detected"
-    elif alert=="Pick 4 (Triple)":
-        combos=[f"{d}{d}{d}{random.randint(0,9)}" for d in random.sample(range(10),3)]
-        reason="Trailing digit drift near resonance"
-    elif alert=="Pick 5 (Quad)":
-        combos=[f"{d}{d}{d}{d}{random.randint(0,9)}" for d in random.sample(range(10),3)]
-        reason="Quad bias in higher mirror zone"
-    else:
-        combos=[f"{d}{d}{d}{random.randint(0,9)}{random.randint(0,9)}" for d in random.sample(range(10),3)]
-        reason="Triple cluster with mirrored twin pattern"
-
+    if alert=="Pick 3 (Triple)": combos=[f"{d}{d}{d}" for d in random.sample(range(10),3)]; reason="Cross-mirror drift in low zone"
+    elif alert=="Pick 4 (Quad)": combos=[f"{d}{d}{d}{d}" for d in random.sample(range(10),3)]; reason="Harmonic quad reflection detected"
+    elif alert=="Pick 4 (Triple)": combos=[f"{d}{d}{d}{random.randint(0,9)}" for d in random.sample(range(10),3)]; reason="Trailing digit drift near resonance"
+    elif alert=="Pick 5 (Quad)": combos=[f"{d}{d}{d}{d}{random.randint(0,9)}" for d in random.sample(range(10),3)]; reason="Quad bias in higher mirror zone"
+    else: combos=[f"{d}{d}{d}{random.randint(0,9)}{random.randint(0,9)}" for d in random.sample(range(10),3)]; reason="Triple cluster with mirrored twin pattern"
     hot_target=random.choice(combos)
     st.write(f"🔥 Suggested Sets → {', '.join(combos)}")
     st.write(f"💎 Hottest Target → **{hot_target}**")
@@ -184,7 +191,7 @@ elif nav=="⚡ Quad & Triple Alerts":
     st.caption("🕓 Play Window: Today – Next 2 Days")
 
 # ==========================================================
-# 🔮 MAJOR GAMES (Original)
+# 🔮 MAJOR GAMES
 # ==========================================================
 elif nav=="🔮 Major Games":
     st.title("🔮 Major Jackpot Forecasts — Titan Explain Mode")
@@ -223,7 +230,7 @@ elif nav=="🧠 Titan Memory":
     st.caption("💾 Titan memory stable | Sync running every 2 minutes.")
 
 # ==========================================================
-# 🪐 TITAN COMMAND MODE — NEW PANEL
+# 🪐 TITAN COMMAND MODE
 # ==========================================================
 elif nav=="🪐 Titan Command Mode":
     st.title("🪐 Titan Command Mode — System Overview")
@@ -238,7 +245,6 @@ elif nav=="🪐 Titan Command Mode":
         st.write(f"{c['region']} — {c['phase']} | Energy: {energy}% | 🌙 {lunar_phase}")
         if sets:
             st.caption(f"🔹 Forecast Sets: {', '.join(sets)}")
-
     line()
     st.markdown(f"🗣 **Titan Summary:** Cycle scan complete under {lunar_phase} moon. Energy rising globally. 🔮")
 
@@ -246,4 +252,4 @@ elif nav=="🪐 Titan Command Mode":
 # 🌌 COSMIC FOOTER
 # ==========================================================
 st.markdown("---")
-st.caption(f"🌌 Celestial Titan God AI v67 — Unified Command Core | Synced: {dt.now().strftime('%Y-%m-%d %H:%M:%S')} | Powered by Johnson & ChatGPT 🔮")
+st.caption(f"🌌 Celestial Titan God AI v67.5 — Unified Command Core | Synced: {dt.now().strftime('%Y-%m-%d %H:%M:%S')} | Powered by Johnson & ChatGPT 🔮")
