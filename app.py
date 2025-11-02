@@ -3,7 +3,7 @@
 # Cosmic Blue Edition ✨
 # ==========================================================
 import streamlit as st
-import os, json, sqlite3, datetime, random
+import os, json, datetime, random
 from datetime import date
 from titan_core.titan_chat import titan_reply
 from titan_core.quad_analyzer import analyze_quads
