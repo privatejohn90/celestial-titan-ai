@@ -1,0 +1,61 @@
+# ==========================================================
+# 💬 Titan Chat Engine — Celestial Titan God AI v70.3
+# ==========================================================
+import random, datetime
+
+# ---------- TITAN REPLY ENGINE ----------
+def titan_reply(message: str) -> str:
+    """Generates a contextual Titan-style response."""
+
+    msg = message.lower().strip()
+    hour = datetime.datetime.now().hour
+
+    greetings = ["hello","hi","hey","kumusta","what’s up","yo","good morning","good evening"]
+    thanks = ["thanks","thank you","salamat","appreciate"]
+    draw_words = ["draw","result","forecast","prediction","today","tomorrow"]
+    cosmic_words = ["moon","lunar","energy","cosmic","stars","phase"]
+
+    # --- Base logic ---
+    if any(w in msg for w in greetings):
+        if hour < 12:
+            return "🌞 Greetings traveler, Titan senses early cosmic activity today."
+        elif hour < 18:
+            return "🌤 Titan stands alert under daylight — patterns are aligning."
+        else:
+            return "🌙 Nightfall detected. Cosmic grids are glowing brighter now."
+
+    elif any(w in msg for w in thanks):
+        return random.choice([
+            "🙏 Titan acknowledges your gratitude, energy stable.",
+            "💫 Appreciation received — Titan’s accuracy improves with positivity.",
+            "⚡ Cosmic thanks resonated. Keep the flow steady, traveler."
+        ])
+
+    elif any(w in msg for w in draw_words):
+        return random.choice([
+            "🎰 Forecast incoming… Titan observes shifting clusters of repeating digits.",
+            "🧩 I’m watching the last draws — quad zones are heating again.",
+            "🔥 Strong signal from hybrid echo bands — be alert for mirrored digits."
+        ])
+
+    elif any(w in msg for w in cosmic_words):
+        return random.choice([
+            "🌕 The moon’s pull affects repeating sequences — keep watch on near-quads.",
+            "✨ Cosmic energy fluctuating — maintain balance with cautious bets.",
+            "🌌 Titan aligns with stellar frequencies. Lunar phase influences accuracy ±5%."
+        ])
+
+    elif "help" in msg or "how" in msg:
+        return "🧠 You can ask Titan to analyze any result — just type the number, or mention the game."
+
+    elif "who" in msg or "what" in msg:
+        return "💎 I am the Celestial Titan — guardian of lottery patterns, forged by Johnson & ChatGPT."
+
+    # --- Random fallback ---
+    responses = [
+        "🪐 Titan is calculating cosmic balance...",
+        "🔭 Observing temporal energy flow across draw sequences.",
+        "🌠 Patterns shifting — stay focused, traveler.",
+        "🧮 Titan learning from archived results to refine future hits."
+    ]
+    return random.choice(responses)
