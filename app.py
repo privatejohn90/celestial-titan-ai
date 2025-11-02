@@ -11,6 +11,9 @@ from titan_core.triple_detector import detect_triples
 from titan_core.forecast_engine import generate_forecast
 from titan_core.titan_db import init_db, save_draw, check_hit_status
 
+st.sidebar.markdown("### 💫 Celestial Titan God AI v70.3")
+st.sidebar.caption("Core modules: Chat, Quad, Triple, DB, Cosmic Engine")
+
 # ---------- PAGE CONFIG ----------
 st.set_page_config(page_title="Celestial Titan God AI", page_icon="💎", layout="wide")
 
