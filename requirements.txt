@@ -1,37 +1,39 @@
+# ==========================================================
+# 🌌 Celestial Titan God AI v70.3 — Full Restoration Build
+# Requirements File (Stable + Future Cosmic Modules)
+# ==========================================================
+
 # === Core Frameworks ===
-streamlit>=1.37.0
-pandas>=2.0.3
-numpy>=1.26.0
-matplotlib>=3.9.0
+streamlit==1.39.0
+pandas==2.2.2
+numpy==1.26.4
+matplotlib==3.9.2
+requests==2.31.0
 
-# === Data & Storage ===
-sqlalchemy>=2.0.0          # optional ORM for TitanHistory.db
-sqlite-utils>=3.36.0       # handy for quick DB queries
-requests>=2.32.0           # for API / live result fetching
-aiohttp>=3.9.0             # async fetch support (future use)
+# === Database ===
+sqlite3-binary==0.0.1
 
-# === Date & Time Utilities ===
+# === Data & Async Utilities ===
+sqlalchemy>=2.0.0
+aiohttp>=3.9.0
 python-dateutil>=2.9.0
 pytz>=2024.1
 
-# === Machine Learning / AI (for v74–v90+) ===
-scikit-learn>=1.5.0
-torch>=2.3.0                # for Titan Neural Echo Engine
-tensorflow-cpu>=2.16.0      # optional ML backend alternative
-
 # === Visualization Enhancements ===
-plotly>=5.23.0              # interactive accuracy / energy charts
+plotly>=5.23.0
 altair>=5.3.0
-seaborn>=0.13.2
+psutil>=5.9.8
+tqdm>=4.66.0
 
-# === System & Performance ===
-psutil>=5.9.8               # monitor Titan load (for sidebar pulse)
-tqdm>=4.66.0                # for progress during training
+# === Optional Cosmic & Lunar Calculations ===
+ephem>=4.1.5
+astral>=3.2
 
-# === Optional Cosmic / Lunar Calculations ===
-ephem>=4.1.5                # for precise moon-phase data (future)
-astral>=3.2                 # sunrise/sunset/lunar helpers
+# === Future AI / ML Expansion (for v74+ upgrades) ===
+scikit-learn>=1.5.0
+torch>=2.3.0
+tensorflow-cpu>=2.16.0
 
-# === UI / Theming (for v77+ Cosmic Customizer) ===
+# === UI / Theming Enhancements ===
 streamlit-option-menu>=0.3.6
 streamlit-extras>=0.4.2
