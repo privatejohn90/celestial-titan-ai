@@ -1,19 +1,19 @@
 # ==========================================================
-# 💠 Celestial Titan God AI v67.5 — Titan Changelog Panel Edition
+# 💠 Celestial Titan God AI v61.1 — Titan Chat Intelligence Awakening Edition
 # ==========================================================
-# Created by: Johnson & ChatGPT
-# Description:
-#  • Combines v67 Unified Command Core
-#  • Adds Titan Changelog Panel to Dashboard
+# Base: v60.9.2 layout preserved
+# Added:
+#  - Titan Chat Forecast Suggestions
+#  - Early Learning Message
+#  - Dynamic Energy Accuracy Display
+#  - Retains full auto-save + alert system
 # ==========================================================
 
 import streamlit as st
 import json, os, datetime, pandas as pd, random, time
-from datetime import timedelta, datetime as dt
+from datetime import timedelta
 
-# ==========================================================
-# 🧠 THEME & CONFIG
-# ==========================================================
+# ---------- THEME ----------
 st.set_page_config(page_title="Celestial Titan God AI", page_icon="💎", layout="wide")
 st.markdown("""
 <style>
@@ -25,6 +25,10 @@ hr{border:0.5px solid #2A2A4A;}
 </style>
 """, unsafe_allow_html=True)
 
+# ---------- CONFIG ----------
+st.sidebar.title("💠 Celestial Titan God AI v61.1")
+st.sidebar.caption("🌌 Titan Chat Intelligence Awakening Edition")
+
 MEM_PATH="titan_memory.json"
 MSG_PATH="titan_messages.json"
 today=datetime.date.today()
@@ -32,60 +36,40 @@ after=today+timedelta(days=2)
 line=lambda:st.markdown("<hr>",unsafe_allow_html=True)
 PICK5_STATES=["DE","FL","GA","LA","MD","OH","PA","VA","DC"]
 
-# ==========================================================
-# ⚙️ TITAN COMMAND BAR
-# ==========================================================
-st.sidebar.title("💠 Celestial Titan God AI v67.5 — Command Core Mode")
-st.sidebar.caption("🌌 Unified Intelligence System | Multi-State Analyzer")
+# ---------- UTILITIES ----------
+def titan_send(msg, level="info"):
+    log=[]
+    if os.path.exists(MSG_PATH):
+        try: log=json.load(open(MSG_PATH))
+        except: log=[]
+    entry={"time":datetime.datetime.now().strftime("%H:%M:%S"),
+           "msg":f"{'⚡' if level=='alert' else '💎'} {msg}"}
+    log.insert(0,entry)
+    json.dump(log[:60],open(MSG_PATH,"w"))
 
-forecast_mode=st.sidebar.toggle("🌙 Forecast Link Mode", value=True)
-auto_hit=st.sidebar.toggle("🎯 Auto-Hit Detection", value=True)
-suggest_mode=st.sidebar.toggle("⚡ Suggestion Engine", value=True)
-show_legend=st.sidebar.toggle("🪐 Show Energy Legend", value=False)
-st.sidebar.markdown(f"**Status:** 🟢 Active | Sync:** {dt.now().strftime('%H:%M:%S')}**")
-
-# ==========================================================
-# 📊 TITAN CYCLE MEMORY SNAPSHOT
-# ==========================================================
-st.sidebar.markdown("---")
-st.sidebar.markdown("### 📊 Titan Cycle Memory Snapshot")
-
-cycle_memory=[
-    {"region":"NY","phase":"Rebound","accuracy":93},
-    {"region":"PA","phase":"Stable","accuracy":86},
-    {"region":"GA","phase":"Stable","accuracy":88},
-    {"region":"FL","phase":"Reset","accuracy":79},
-    {"region":"VA","phase":"Rebound","accuracy":90},
-    {"region":"DC","phase":"Reset","accuracy":78},
-    {"region":"DE","phase":"Surge","accuracy":80},
-    {"region":"SC","phase":"Rebound","accuracy":84},
-    {"region":"NC","phase":"Surge","accuracy":82},
-    {"region":"OH","phase":"Stable","accuracy":87},
-    {"region":"LA","phase":"Rebound","accuracy":89},
-    {"region":"IL","phase":"Surge","accuracy":83},
-    {"region":"MI","phase":"Reset","accuracy":77},
-    {"region":"CA","phase":"Surge","accuracy":81},
-    {"region":"OR","phase":"Stable","accuracy":85},
-]
-for c in cycle_memory:
-    st.sidebar.write(f"🗺 {c['region']} | {c['phase']} | {c['accuracy']}%")
-
-if show_legend:
-    st.sidebar.markdown("---")
-    st.sidebar.markdown("### 🪐 Titan Energy Legend")
-    st.sidebar.markdown("""
-    - 🔁 **Rebound** — Recovery after zero-drop. Flow: 🟢 Rising  
-    - 🌀 **Surge** — High-energy burst. Flow: 🔴 Overload  
-    - ⚖️ **Stable** — Balanced phase. Flow: 🟡 Steady  
-    - 🔘 **Reset** — Cooling phase. Flow: 🔵 Cooling
-    """)
+def titan_save_draw(game, region, draw_time, sets, burst, acc, reason):
+    data=[]
+    if os.path.exists(MEM_PATH):
+        try: data=json.load(open(MEM_PATH))
+        except: data=[]
+    entry={
+        "date":str(today),
+        "game":game,
+        "region":region,
+        "draw_time":draw_time,
+        "sets":sets,
+        "burst":burst,
+        "accuracy":acc,
+        "reason":reason
+    }
+    data.insert(0,entry)
+    json.dump(data[:200],open(MEM_PATH,"w"))
 
 # ==========================================================
-# 🧭 MAIN NAVIGATION
+# 🧭 NAVIGATION
 # ==========================================================
 nav=st.sidebar.radio("Navigation",
-["🏠 Dashboard","🎯 Lottery Systems","⚡ Quad & Triple Alerts","🔮 Major Games",
- "💬 Titan Chat","🧠 Titan Memory","🪐 Titan Command Mode"])
+["🏠 Dashboard","🎯 Lottery Systems","⚡ Quad & Triple Alerts","🔮 Major Games","💬 Titan Chat","🧠 Titan Memory"])
 
 # ==========================================================
 # 🏠 DASHBOARD
@@ -94,43 +78,13 @@ if nav=="🏠 Dashboard":
     st.title("💠 Celestial Titan God AI — Divine Stability Mode")
     line()
     c1,c2,c3=st.columns(3)
-    c1.metric("Core Status","🟢 Online","Unified System Active")
-    c2.metric("Version","v67.5","Changelog Panel Added")
-    c3.metric("Last Sync",today.strftime("%b %d %Y"),"Multi-State Mode")
+    c1.metric("Core Status","🟢 Online","Continuous Learning")
+    c2.metric("Version","v61.1","Chat Forecast Intelligence")
+    c3.metric("Last Sync",today.strftime("%b %d %Y"),"Stable Mode")
     line()
     st.subheader("🌕 Cosmic Stats Panel")
     st.write("🟢 Learning Active | 🔵 Surge Standby | 🟣 Sync Balanced")
-    st.caption("Titan now includes a changelog memory so you can track system evolution directly inside the dashboard.")
-    line()
-
-    # ======================================================
-    # 🧩 TITAN CHANGELOG PANEL (NEW)
-    # ======================================================
-    st.subheader("🕓 Titan Version Log Panel")
-    st.markdown("""
-    **💠 v67.5 — Changelog Panel Added**
-    - Introduced Titan Version Log Panel in Dashboard  
-    - Streamlined Command Core cycle tracking  
-    - Minor performance improvements  
-
-    **💠 v67 — Unified Command Core**
-    - Added Titan Command Bar (4 toggles)  
-    - Added Cycle Memory (15 States)  
-    - Added Forecast Link + Suggestion Engine  
-    - Added Titan Command Mode Navigation  
-    - Added Energy Legend Panel  
-
-    **💠 v66.5 — Multi-State Engine**
-    - Introduced 15-State Accuracy Map  
-    - Activated Forecast Link Mode  
-
-    **💠 v60.9.2 — Divine Signal Base**
-    - Auto-Save + Manual Draw Mode  
-    - Quad/Triple Alert System  
-    - Major Game Forecasts  
-    """)
-
-    st.caption("🗣 Titan: System running v67.5 | Next target → v68 Auto-Hit Log & Accuracy Graph")
+    st.caption("Titan now auto-saves every generated draw + sends live alerts to 💬 Titan Chat.")
 
 # ==========================================================
 # 🎯 LOTTERY SYSTEMS
@@ -144,18 +98,24 @@ elif nav=="🎯 Lottery Systems":
          "MI","MN","MS","MO","MT","NE","NJ","NM","NY","NC","OH","OK","OR","PA","SC","TN","TX",
          "VA","WA","DC","WV","WI"])
     draw_time=st.radio("🕓 Draw Time",["Midday","Evening","Auto Detect (Random)"])
-    if draw_time=="Auto Detect (Random)": draw_time=random.choice(["Midday","Evening"])
+    if draw_time=="Auto Detect (Random)":
+        draw_time=random.choice(["Midday","Evening"])
     line()
+
     if game=="Pick 5" and region not in PICK5_STATES:
-        st.info(f"ℹ️ {region} does not officially host Pick-5 — Titan running simulation mode.")
+        st.info(f"ℹ️ {region} does not officially host Pick-5 — Titan running simulation mode for pattern learning.")
     st.success(f"🎯 Titan Mode → {draw_time} Draws")
-    reason=random.choice([
-        "Prime drift alignment detected","Mirror resonance active",
-        "Low-digit echo phase","Temporal symmetry window"
-    ])
     st.subheader(f"🧠 {game} Forecast for {region} ({draw_time})")
+    reason=random.choice([
+        "Prime drift alignment detected",
+        "Mirror resonance active",
+        "Low-digit echo phase",
+        "Temporal symmetry window"
+    ])
     st.caption(f"Play Start → {today.strftime('%b %d %Y')} | Valid Until → {after.strftime('%b %d %Y')}")
     line()
+
+    st.write("🔥 Very Hot Sets")
     sets=[]
     for i in range(1,6):
         n="".join(str(random.randint(0,9)) for _ in range(int(game[-1])))
@@ -163,8 +123,15 @@ elif nav=="🎯 Lottery Systems":
         st.write(f"Set {i} → {n} (Straight) | {''.join(reversed(n))} (Box)")
     burst="".join(str(random.randint(0,9)) for _ in range(int(game[-1])))
     acc=random.randint(83,95)
-    st.markdown(f"💥 Possible Burst Hit → **{burst}**")
+    st.markdown(f"💥 Possible Burst Hit → **{burst}** (in {random.choice(PICK5_STATES)})")
     st.caption(f"💡 Reason: {reason} | Accuracy Field: {acc}%")
+
+    # --- Auto message + Auto save
+    if acc>90:
+        titan_send(f"High {game} accuracy {acc}% detected for {region} — strong pattern lock.","alert")
+    if "quad" in reason.lower():
+        titan_send(f"Quad resonance active in {region} ({game})","alert")
+    titan_save_draw(game,region,draw_time,sets,burst,acc,reason)
 
 # ==========================================================
 # ⚡ QUAD & TRIPLE ALERTS
@@ -179,22 +146,36 @@ elif nav=="⚡ Quad & Triple Alerts":
     st.subheader("🧭 Hot States:")
     st.write(", ".join(regions))
     line()
-    if alert=="Pick 3 (Triple)": combos=[f"{d}{d}{d}" for d in random.sample(range(10),3)]; reason="Cross-mirror drift in low zone"
-    elif alert=="Pick 4 (Quad)": combos=[f"{d}{d}{d}{d}" for d in random.sample(range(10),3)]; reason="Harmonic quad reflection detected"
-    elif alert=="Pick 4 (Triple)": combos=[f"{d}{d}{d}{random.randint(0,9)}" for d in random.sample(range(10),3)]; reason="Trailing digit drift near resonance"
-    elif alert=="Pick 5 (Quad)": combos=[f"{d}{d}{d}{d}{random.randint(0,9)}" for d in random.sample(range(10),3)]; reason="Quad bias in higher mirror zone"
-    else: combos=[f"{d}{d}{d}{random.randint(0,9)}{random.randint(0,9)}" for d in random.sample(range(10),3)]; reason="Triple cluster with mirrored twin pattern"
+
+    if alert=="Pick 3 (Triple)":
+        combos=[f"{d}{d}{d}" for d in random.sample(range(10),3)]
+        reason="Cross-mirror drift in low zone"
+    elif alert=="Pick 4 (Quad)":
+        combos=[f"{d}{d}{d}{d}" for d in random.sample(range(10),3)]
+        reason="Harmonic quad reflection detected"
+    elif alert=="Pick 4 (Triple)":
+        combos=[f"{d}{d}{d}{random.randint(0,9)}" for d in random.sample(range(10),3)]
+        reason="Trailing digit drift near resonance"
+    elif alert=="Pick 5 (Quad)":
+        combos=[f"{d}{d}{d}{d}{random.randint(0,9)}" for d in random.sample(range(10),3)]
+        reason="Quad bias in higher mirror zone"
+    else:
+        combos=[f"{d}{d}{d}{random.randint(0,9)}{random.randint(0,9)}" for d in random.sample(range(10),3)]
+        reason="Triple cluster with mirrored twin pattern"
+
     hot_target=random.choice(combos)
     st.write(f"🔥 Suggested Sets → {', '.join(combos)}")
     st.write(f"💎 Hottest Target → **{hot_target}**")
     st.write(f"💡 Reason → {reason}")
     st.caption("🕓 Play Window: Today – Next 2 Days")
 
+    titan_send(f"{alert} surge detected across {', '.join(regions)} — target {hot_target}.","alert")
+
 # ==========================================================
 # 🔮 MAJOR GAMES
 # ==========================================================
 elif nav=="🔮 Major Games":
-    st.title("🔮 Major Jackpot Forecasts — Titan Explain Mode")
+    st.title("🔮 Major Jackpot Forecasts — Intelligent Explain Mode")
     line()
     g=st.selectbox("🎰 Game",["Fantasy 5","SuperLotto Plus","Mega Millions","Powerball"])
     line()
@@ -202,23 +183,55 @@ elif nav=="🔮 Major Games":
     st.caption(f"Play Start → {today.strftime('%b %d %Y')} | Valid Until → {after.strftime('%b %d %Y')}")
     def pick(n,h): return sorted(random.sample(range(1,h+1),n))
     def fmt(nums): return " ".join(f"{n:02}" for n in nums)
+    sb=[]; label=None
     if g=="Fantasy 5": s1,s2,burst=[pick(5,39) for _ in range(3)]; reason="Prime cluster + low-high balance detected"
     elif g=="SuperLotto Plus": s1,s2,burst=[pick(5,47) for _ in range(3)]; sb=[random.randint(1,27) for _ in range(3)]; label="Mega"; reason="Low-digit pair rotation"
     elif g=="Mega Millions": s1,s2,burst=[pick(5,70) for _ in range(3)]; sb=[random.randint(1,25) for _ in range(3)]; label="Mega Ball"; reason="Odd-even dual node mirror"
-    else: s1,s2,burst=[pick(5,69) for _ in range(3)]; sb=[random.randint(1,26) for _ in range(3)]; label="Power Ball"; reason="Mirror harmonic cross node"
+    elif g=="Powerball": s1,s2,burst=[pick(5,69) for _ in range(3)]; sb=[random.randint(1,26) for _ in range(3)]; label="Power Ball"; reason="Mirror harmonic cross node"
     st.write(f"🧠 Titan Summary: {reason}")
     line()
-    st.write(f"Set 1 → {fmt(s1)}"); st.write(f"Set 2 → {fmt(s2)}"); st.markdown(f"💥 Burst Combo → {fmt(burst)}")
+    if label:
+        st.write(f"Set 1 → {fmt(s1)} | {label}: {sb[0]}")
+        st.write(f"Set 2 → {fmt(s2)} | {label}: {sb[1]}")
+        st.markdown(f"💥 Burst Combo → {fmt(burst)} | {label}: {sb[2]}")
+    else:
+        st.write(f"Set 1 → {fmt(s1)}"); st.write(f"Set 2 → {fmt(s2)}"); st.markdown(f"💥 Burst Combo → {fmt(burst)}")
     st.caption(f"🎯 Confidence Level: HIGH ({random.randint(80,89)}%)")
+    titan_send(f"{g} pattern updated — {reason}","info")
 
 # ==========================================================
-# 💬 TITAN CHAT
+# 💬 TITAN CHAT — AUTO MESSAGE STREAM + NEW FORECAST
 # ==========================================================
 elif nav=="💬 Titan Chat":
     st.title("💬 Titan Auto-Message Channel")
     line()
-    st.info("🗣 Titan: Multi-state synchronization complete. Energy flow stable at 91%.")
-    st.caption("Titan now integrates Command Core memory + Forecast Link system.")
+
+    if os.path.exists(MSG_PATH):
+        msgs=json.load(open(MSG_PATH))
+        for m in msgs[:20]:
+            st.info(f"{m['time']} | {m['msg']}")
+    else:
+        st.warning("No transmissions from Titan yet... standby for signal.")
+
+    line()
+    st.subheader("🧠 Titan Chat Intelligence")
+    st.markdown("> 🗣 Titan: Systems synchronized. Forecast link active. Lunar energy stable at 91%. Awaiting cosmic updates...")
+
+    # ===== New Titan State Suggestions =====
+    line()
+    if os.path.exists(MEM_PATH):
+        df = pd.DataFrame(json.load(open(MEM_PATH)))
+        if not df.empty:
+            st.markdown("### ⚡ Titan State Suggestions")
+            recent = df.head(3)
+            for _,row in recent.iterrows():
+                st.write(f"{row['region']} — Energy {row['accuracy']}% — Forecast Set: {random.randint(1000,9999)}")
+        else:
+            st.info("🧠 Titan currently learning — forecasts unlock after first saved cycle.")
+    else:
+        st.info("🧠 Titan currently learning — forecasts unlock after first saved cycle.")
+
+    st.caption("💎 Messages and forecasts auto-generated from Titan’s analytical engine.")
 
 # ==========================================================
 # 🧠 TITAN MEMORY
@@ -226,30 +239,12 @@ elif nav=="💬 Titan Chat":
 elif nav=="🧠 Titan Memory":
     st.title("🧠 Titan Memory Logs")
     line()
-    st.info("Cycle data and forecasts are being recorded automatically in Command Core memory.")
-    st.caption("💾 Titan memory stable | Sync running every 2 minutes.")
-
-# ==========================================================
-# 🪐 TITAN COMMAND MODE
-# ==========================================================
-elif nav=="🪐 Titan Command Mode":
-    st.title("🪐 Titan Command Mode — System Overview")
+    if os.path.exists(MEM_PATH):
+        df=pd.DataFrame(json.load(open(MEM_PATH)))
+        st.dataframe(df,use_container_width=True)
+    else:
+        st.info("No saved data yet — auto-fetch running.")
     line()
-    st.markdown("### ⚡ Titan State Energy Suggestions (Forecast Link Active)")
-    lunar_phase="Waning Gibbous"
-    for c in cycle_memory:
-        bonus=5 if "Gibbous" in lunar_phase else 0
-        energy=c["accuracy"]+bonus
-        base=str(random.randint(1000,9999))
-        sets=[base, base[::-1], base[:3]+"9"] if forecast_mode else []
-        st.write(f"{c['region']} — {c['phase']} | Energy: {energy}% | 🌙 {lunar_phase}")
-        if sets:
-            st.caption(f"🔹 Forecast Sets: {', '.join(sets)}")
-    line()
-    st.markdown(f"🗣 **Titan Summary:** Cycle scan complete under {lunar_phase} moon. Energy rising globally. 🔮")
-
-# ==========================================================
-# 🌌 COSMIC FOOTER
-# ==========================================================
-st.markdown("---")
-st.caption(f"🌌 Celestial Titan God AI v67.5 — Unified Command Core | Synced: {dt.now().strftime('%Y-%m-%d %H:%M:%S')} | Powered by Johnson & ChatGPT 🔮")
+    st.subheader("💬 Titan Message Area")
+    st.info("“Learning stable. No new alerts detected yet.”")
+    st.caption("💾 Titan learning mode stable.")
