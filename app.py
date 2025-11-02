@@ -1,12 +1,13 @@
 # ==========================================================
-# 💠 Celestial Titan God AI v67.5 — Hybrid Merge Build
+# 💠 Celestial Titan God AI v67.5.1 — Permanent Stability Patch
 # ==========================================================
+# ✅ Fix: StreamlitDuplicateElementId with unique keys
 # ✅ Keeps all Titan systems (Chat, Memory, Major Games)
-# ✅ Fixes DuplicateElementId with unique widget keys
 # ✅ Cloud Safe + GitHub Ready
 # ==========================================================
 import streamlit as st
 import json, os, datetime, pandas as pd, random
+from io import StringIO
 from datetime import timedelta
 
 # ---------- THEME ----------
@@ -22,8 +23,8 @@ hr{border:0.5px solid #2A2A4A;}
 """, unsafe_allow_html=True)
 
 # ---------- CONFIG ----------
-st.sidebar.title("💠 Celestial Titan God AI v67.5")
-st.sidebar.caption("🌌 Hybrid Merge Build — Permanent Stability")
+st.sidebar.title("💠 Celestial Titan God AI v67.5.1")
+st.sidebar.caption("🌌 Permanent Stability + Duplicate ID Patch")
 
 MEM_PATH = "titan_memory.json"
 MSG_PATH = "titan_messages.json"
@@ -37,7 +38,38 @@ after = today + timedelta(days=2)
 line = lambda: st.markdown("<hr>", unsafe_allow_html=True)
 PICK5_STATES = ["DE","FL","GA","LA","MD","OH","PA","VA","DC"]
 
-# ---------- UTILITIES ----------
+# ==========================================================
+# 🔧 SAFE DATASET LOADER (Duplicate ID Permanent Fix)
+# ==========================================================
+def load_dataset(uploaded_file, game_type="Pick3", unique_tag=""):
+    """Loads dataset safely with unique widget key per analyzer tab."""
+    if uploaded_file is not None:
+        return pd.read_csv(uploaded_file)
+
+    # globally unique Streamlit widget key
+    unique_key = f"text_area_{game_type.lower()}_{unique_tag}"
+    sample_text = st.text_area(
+        f"Paste CSV text for {game_type}", height=120, key=unique_key
+    )
+
+    if not sample_text:
+        st.info(f"No file uploaded for {game_type}. Using sample dataset.")
+        df = pd.DataFrame({
+            "date": ["2025-10-29", "2025-10-30", "2025-10-31"],
+            "draw_time": ["Midday", "Evening", "Evening"],
+            "numbers": ["134", "255", "409"]
+        })
+    else:
+        try:
+            df = pd.read_csv(StringIO(sample_text))
+        except Exception as e:
+            st.error(f"⚠️ Invalid CSV format: {e}")
+            return None
+    return df
+
+# ==========================================================
+# 🔧 UTILITIES
+# ==========================================================
 def titan_send(msg, level="info"):
     log = []
     if os.path.exists(MSG_PATH):
@@ -79,12 +111,12 @@ if nav == "🏠 Dashboard":
     line()
     c1,c2,c3 = st.columns(3)
     c1.metric("Core Status","🟢 Online","Continuous Learning")
-    c2.metric("Version","v67.5","Hybrid Stability")
-    c3.metric("Last Sync", today.strftime("%b %d %Y"), "Cloud Synced")
+    c2.metric("Version","v67.5.1","Stability Patch")
+    c3.metric("Last Sync", today.strftime("%b %d %Y"), "Synced")
     line()
     st.subheader("🌕 Cosmic Stats Panel")
-    st.write("🟢 Learning Active | 🔵 Surge Standby | 🟣 Sync Balanced")
-    st.caption("Titan auto-saves every generated draw + sends live alerts to 💬 Titan Chat.")
+    st.write("🟢 Stable | 🟡 Active | 🔴 Surge Detected")
+    st.caption("Titan auto-saves generated draws + sends live alerts to 💬 Titan Chat.")
 
 # ==========================================================
 # 🎯 LOTTERY SYSTEMS
@@ -93,12 +125,12 @@ elif nav == "🎯 Lottery Systems":
     st.title("🎯 Pick-3 / Pick-4 / Pick-5 Forecast + Live Results")
     line()
 
-    game = st.selectbox("🎮 Select Game Type", ["Pick 3","Pick 4","Pick 5"], key="lot_game_type_v675")
+    game = st.selectbox("🎮 Select Game Type", ["Pick 3","Pick 4","Pick 5"], key="lot_game_type_v6751")
     region = st.selectbox("🌍 Select Region",
         ["AZ","AR","CA","CO","CT","DE","FL","GA","ID","IL","IN","IA","KS","KY","LA","MD","MA",
          "MI","MN","MS","MO","MT","NE","NJ","NM","NY","NC","OH","OK","OR","PA","SC","TN","TX",
-         "VA","WA","DC","WV","WI"], key="lot_region_v675")
-    draw_time = st.radio("🕓 Draw Time", ["Midday","Evening","Auto Detect (Random)"], key="lot_drawtime_v675")
+         "VA","WA","DC","WV","WI"], key="lot_region_v6751")
+    draw_time = st.radio("🕓 Draw Time", ["Midday","Evening","Auto Detect (Random)"], key="lot_drawtime_v6751")
 
     if draw_time == "Auto Detect (Random)":
         draw_time = random.choice(["Midday","Evening"])
@@ -136,7 +168,7 @@ elif nav == "⚡ Quad & Triple Alerts":
     st.title("⚡ Quad & Triple Alert Panel — Precision Mode")
     alert = st.selectbox("🔮 Alert Type",
         ["Pick 3 (Triple)","Pick 4 (Quad)","Pick 4 (Triple)","Pick 5 (Quad)","Pick 5 (Triple)"],
-        key="quad_alert_type_v675")
+        key="quad_alert_type_v6751")
     line()
 
     regions = random.sample(PICK5_STATES if "Pick 5" in alert else
@@ -164,7 +196,7 @@ elif nav == "⚡ Quad & Triple Alerts":
 # ==========================================================
 elif nav == "🔮 Major Games":
     st.title("🔮 Major Jackpot Forecasts — Intelligent Mode")
-    g = st.selectbox("🎰 Game",["Fantasy 5","SuperLotto Plus","Mega Millions","Powerball"], key="major_game_v675")
+    g = st.selectbox("🎰 Game",["Fantasy 5","SuperLotto Plus","Mega Millions","Powerball"], key="major_game_v6751")
     line()
     st.subheader(f"🌠 {g} Forecast")
     st.caption(f"Play Start → {today.strftime('%b %d %Y')} | Valid Until → {after.strftime('%b %d %Y')}")
