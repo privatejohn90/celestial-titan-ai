@@ -1,14 +1,12 @@
 # ==========================================================
-# 💠 Celestial Titan God AI v67.4 — Permanent Streamlit ID Fix
+# 💠 Celestial Titan God AI v67.5 — Hybrid Merge Build
 # ==========================================================
-# Fixes:
-#  - StreamlitDuplicateElementId (unique widget keys added)
-#  - Auto-create JSON on startup
-#  - Cloud stable, full layout intact
+# ✅ Keeps all Titan systems (Chat, Memory, Major Games)
+# ✅ Fixes DuplicateElementId with unique widget keys
+# ✅ Cloud Safe + GitHub Ready
 # ==========================================================
-
 import streamlit as st
-import json, os, datetime, pandas as pd, random, time
+import json, os, datetime, pandas as pd, random
 from datetime import timedelta
 
 # ---------- THEME ----------
@@ -24,12 +22,11 @@ hr{border:0.5px solid #2A2A4A;}
 """, unsafe_allow_html=True)
 
 # ---------- CONFIG ----------
-st.sidebar.title("💠 Celestial Titan God AI v67.4")
-st.sidebar.caption("🌌 Permanent ID Fix + Cloud Stability")
+st.sidebar.title("💠 Celestial Titan God AI v67.5")
+st.sidebar.caption("🌌 Hybrid Merge Build — Permanent Stability")
 
 MEM_PATH = "titan_memory.json"
 MSG_PATH = "titan_messages.json"
-
 for path in [MEM_PATH, MSG_PATH]:
     if not os.path.exists(path):
         with open(path, "w") as f:
@@ -44,8 +41,10 @@ PICK5_STATES = ["DE","FL","GA","LA","MD","OH","PA","VA","DC"]
 def titan_send(msg, level="info"):
     log = []
     if os.path.exists(MSG_PATH):
-        try: log = json.load(open(MSG_PATH))
-        except: log = []
+        try:
+            log = json.load(open(MSG_PATH))
+        except:
+            log = []
     entry = {"time": datetime.datetime.now().strftime("%H:%M:%S"),
              "msg": f"{'⚡' if level=='alert' else '💎'} {msg}"}
     log.insert(0, entry)
@@ -54,8 +53,10 @@ def titan_send(msg, level="info"):
 def titan_save_draw(game, region, draw_time, sets, burst, acc, reason):
     data = []
     if os.path.exists(MEM_PATH):
-        try: data = json.load(open(MEM_PATH))
-        except: data = []
+        try:
+            data = json.load(open(MEM_PATH))
+        except:
+            data = []
     entry = {"date": str(today),"game": game,"region": region,"draw_time": draw_time,
              "sets": sets,"burst": burst,"accuracy": acc,"reason": reason}
     data.insert(0, entry)
@@ -64,9 +65,11 @@ def titan_save_draw(game, region, draw_time, sets, burst, acc, reason):
 # ==========================================================
 # 🧭 NAVIGATION
 # ==========================================================
-nav = st.sidebar.radio("Navigation", 
+nav = st.sidebar.radio(
+    "Navigation",
     ["🏠 Dashboard","🎯 Lottery Systems","⚡ Quad & Triple Alerts","🔮 Major Games","💬 Titan Chat","🧠 Titan Memory"],
-    key="nav_select")
+    key="nav_select_main"
+)
 
 # ==========================================================
 # 🏠 DASHBOARD
@@ -76,8 +79,8 @@ if nav == "🏠 Dashboard":
     line()
     c1,c2,c3 = st.columns(3)
     c1.metric("Core Status","🟢 Online","Continuous Learning")
-    c2.metric("Version","v67.4","Permanent ID Fix")
-    c3.metric("Last Sync", today.strftime("%b %d %Y"), "Stable Mode")
+    c2.metric("Version","v67.5","Hybrid Stability")
+    c3.metric("Last Sync", today.strftime("%b %d %Y"), "Cloud Synced")
     line()
     st.subheader("🌕 Cosmic Stats Panel")
     st.write("🟢 Learning Active | 🔵 Surge Standby | 🟣 Sync Balanced")
@@ -90,12 +93,12 @@ elif nav == "🎯 Lottery Systems":
     st.title("🎯 Pick-3 / Pick-4 / Pick-5 Forecast + Live Results")
     line()
 
-    game = st.selectbox("🎮 Select Game Type", ["Pick 3","Pick 4","Pick 5"], key="lot_game_type")
-    region = st.selectbox("🌍 Select Region", 
+    game = st.selectbox("🎮 Select Game Type", ["Pick 3","Pick 4","Pick 5"], key="lot_game_type_v675")
+    region = st.selectbox("🌍 Select Region",
         ["AZ","AR","CA","CO","CT","DE","FL","GA","ID","IL","IN","IA","KS","KY","LA","MD","MA",
          "MI","MN","MS","MO","MT","NE","NJ","NM","NY","NC","OH","OK","OR","PA","SC","TN","TX",
-         "VA","WA","DC","WV","WI"], key="lot_region")
-    draw_time = st.radio("🕓 Draw Time", ["Midday","Evening","Auto Detect (Random)"], key="lot_drawtime")
+         "VA","WA","DC","WV","WI"], key="lot_region_v675")
+    draw_time = st.radio("🕓 Draw Time", ["Midday","Evening","Auto Detect (Random)"], key="lot_drawtime_v675")
 
     if draw_time == "Auto Detect (Random)":
         draw_time = random.choice(["Midday","Evening"])
@@ -106,12 +109,7 @@ elif nav == "🎯 Lottery Systems":
     st.success(f"🎯 Titan Mode → {draw_time} Draws")
     st.subheader(f"🧠 {game} Forecast for {region} ({draw_time})")
 
-    reason = random.choice([
-        "Prime drift alignment detected",
-        "Mirror resonance active",
-        "Low-digit echo phase",
-        "Temporal symmetry window"
-    ])
+    reason = random.choice(["Prime drift alignment detected","Mirror resonance active","Low-digit echo phase","Temporal symmetry window"])
     st.caption(f"Play Start → {today.strftime('%b %d %Y')} | Valid Until → {after.strftime('%b %d %Y')}")
     line()
 
@@ -127,7 +125,8 @@ elif nav == "🎯 Lottery Systems":
     st.markdown(f"💥 Possible Burst Hit → **{burst}** (in {random.choice(PICK5_STATES)})")
     st.caption(f"💡 Reason: {reason} | Accuracy Field: {acc}%")
 
-    if acc > 90: titan_send(f"High {game} accuracy {acc}% detected for {region}.", "alert")
+    if acc > 90:
+        titan_send(f"High {game} accuracy {acc}% detected for {region}.", "alert")
     titan_save_draw(game, region, draw_time, sets, burst, acc, reason)
 
 # ==========================================================
@@ -136,7 +135,8 @@ elif nav == "🎯 Lottery Systems":
 elif nav == "⚡ Quad & Triple Alerts":
     st.title("⚡ Quad & Triple Alert Panel — Precision Mode")
     alert = st.selectbox("🔮 Alert Type",
-        ["Pick 3 (Triple)","Pick 4 (Quad)","Pick 4 (Triple)","Pick 5 (Quad)","Pick 5 (Triple)"], key="quad_alert_type")
+        ["Pick 3 (Triple)","Pick 4 (Quad)","Pick 4 (Triple)","Pick 5 (Quad)","Pick 5 (Triple)"],
+        key="quad_alert_type_v675")
     line()
 
     regions = random.sample(PICK5_STATES if "Pick 5" in alert else
@@ -164,7 +164,7 @@ elif nav == "⚡ Quad & Triple Alerts":
 # ==========================================================
 elif nav == "🔮 Major Games":
     st.title("🔮 Major Jackpot Forecasts — Intelligent Mode")
-    g = st.selectbox("🎰 Game", ["Fantasy 5","SuperLotto Plus","Mega Millions","Powerball"], key="major_game")
+    g = st.selectbox("🎰 Game",["Fantasy 5","SuperLotto Plus","Mega Millions","Powerball"], key="major_game_v675")
     line()
     st.subheader(f"🌠 {g} Forecast")
     st.caption(f"Play Start → {today.strftime('%b %d %Y')} | Valid Until → {after.strftime('%b %d %Y')}")
@@ -172,14 +172,14 @@ elif nav == "🔮 Major Games":
     def pick(n,h): return sorted(random.sample(range(1,h+1),n))
     def fmt(nums): return " ".join(f"{n:02}" for n in nums)
 
-    if g=="Fantasy 5": s1,s2,burst=[pick(5,39) for _ in range(3)]; reason="Prime cluster + balance detected"; sb=[]
+    if g=="Fantasy 5": s1,s2,burst=[pick(5,39) for _ in range(3)]; reason="Prime cluster balance"; sb=[]
     elif g=="SuperLotto Plus": s1,s2,burst=[pick(5,47) for _ in range(3)]; sb=[random.randint(1,27) for _ in range(3)]; reason="Low-digit rotation"
     elif g=="Mega Millions": s1,s2,burst=[pick(5,70) for _ in range(3)]; sb=[random.randint(1,25) for _ in range(3)]; reason="Odd-even dual mirror"
     elif g=="Powerball": s1,s2,burst=[pick(5,69) for _ in range(3)]; sb=[random.randint(1,26) for _ in range(3)]; reason="Harmonic mirror cross"
 
     line()
     st.write(f"🧠 Titan Summary: {reason}")
-    if sb: 
+    if sb:
         st.write(f"Set 1 → {fmt(s1)} | Ball: {sb[0]}")
         st.write(f"Set 2 → {fmt(s2)} | Ball: {sb[1]}")
         st.markdown(f"💥 Burst Combo → {fmt(burst)} | Ball: {sb[2]}")
@@ -214,8 +214,10 @@ elif nav == "💬 Titan Chat":
             st.markdown("### ⚡ Titan State Suggestions")
             for _,row in df.head(3).iterrows():
                 st.write(f"{row['region']} — Energy {row['accuracy']}% — Forecast Set: {random.randint(1000,9999)}")
-        else: st.info("🧠 Titan currently learning — forecasts unlock after first saved cycle.")
-    else: st.info("🧠 Titan currently learning — forecasts unlock after first saved cycle.")
+        else:
+            st.info("🧠 Titan currently learning — forecasts unlock after first saved cycle.")
+    else:
+        st.info("🧠 Titan currently learning — forecasts unlock after first saved cycle.")
     st.caption("💎 Messages auto-generated from Titan’s analytical engine.")
 
 # ==========================================================
@@ -227,7 +229,8 @@ elif nav == "🧠 Titan Memory":
     if os.path.exists(MEM_PATH):
         df = pd.DataFrame(json.load(open(MEM_PATH)))
         st.dataframe(df, use_container_width=True)
-    else: st.info("No saved data yet — auto-fetch running.")
+    else:
+        st.info("No saved data yet — auto-fetch running.")
     line()
     st.subheader("💬 Titan Message Area")
     st.info("“Learning stable. No new alerts detected yet.”")
