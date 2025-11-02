@@ -1,267 +1,184 @@
-# ==========================================================
-# 💠 Celestial Titan God AI v70.2 — Resonance Cloud Fusion Build
-# ==========================================================
-# Fusion of Cloud Infinity (v70.0) + Resonance Precision (v70.1)
-# Full JSON Memory Engine + Restored Triple/Quad Detection + Titan Reasoning
-# ==========================================================
-
+# ==============================================================
+# 🌌 Celestial Titan God AI v70.4 — Accuracy Trend & Lunar Synchrony
+# ==============================================================
 import streamlit as st
-import json, os, datetime, pandas as pd, random, time
-from datetime import timedelta
+import json, datetime, random, os, sqlite3, math, pandas as pd
+from datetime import date, timedelta
+import matplotlib.pyplot as plt
 
-# ---------- THEME ----------
+# ---------- PAGE SETUP ----------
 st.set_page_config(page_title="Celestial Titan God AI", page_icon="💎", layout="wide")
 st.markdown("""
 <style>
-[data-testid="stSidebar"]{
-  background:linear-gradient(180deg,#041024 0%,#081C3A 100%);
-  color:#E0E0E0;
+[data-testid="stSidebar"] {
+  background: linear-gradient(180deg,#041024 0%,#0B1F45 100%);
+  color: #E0E0E0;
 }
-[data-testid="stAppViewContainer"]{
-  background:radial-gradient(circle at 20% 20%,#091530 0%,#0C1020 35%,#05080F 100%);
+[data-testid="stAppViewContainer"] {
+  background: radial-gradient(circle at 30% 20%,#091530 0%,#050812 80%);
 }
-h1,h2,h3,h4,h5,h6,p,div{color:#E0E0E0!important;}
-hr{border:0.5px solid #2A2A4A;}
-.stButton>button{
-  background:linear-gradient(90deg,#0040A0,#0078D7);
-  border:none;border-radius:8px;
-  color:white;font-weight:bold;
+h1,h2,h3,h4,h5,h6,p,div {color:#E0E0E0!important;}
+hr {border:0.5px solid #2A2A4A;}
+.stButton>button {
+  background:linear-gradient(90deg,#0040FF,#6B00FF);
+  color:white;border:none;border-radius:5px;
 }
+.sidebar-title {font-size:20px;font-weight:bold;margin-bottom:10px;}
 </style>
 """, unsafe_allow_html=True)
 
-# ---------- CONFIG ----------
-st.sidebar.title("💠 Celestial Titan God AI v70.2")
-st.sidebar.caption("☁️ Resonance Cloud Fusion | Stable JSON Memory Engine")
+# ---------- MEMORY ----------
+MEMORY_FILE = "titan_memory.json"
+if not os.path.exists(MEMORY_FILE):
+    with open(MEMORY_FILE,"w") as f: json.dump({}, f)
+with open(MEMORY_FILE,"r") as f: titan_memory = json.load(f)
 
-MEM_PATH = "titan_memory.json"
-MSG_PATH = "titan_messages.json"
+def save_memory(key,data):
+    titan_memory[key]=data
+    with open(MEMORY_FILE,"w") as f: json.dump(titan_memory,f,indent=2)
 
-for path in [MEM_PATH, MSG_PATH]:
-    if not os.path.exists(path):
-        with open(path, "w") as f:
-            json.dump([], f)
+# ---------- DATABASE ----------
+def init_db():
+    conn=sqlite3.connect("titan_history.db")
+    c=conn.cursor()
+    c.execute("""CREATE TABLE IF NOT EXISTS draws(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        game TEXT, draw TEXT, result TEXT, status TEXT,
+        date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )""")
+    c.execute("""CREATE TABLE IF NOT EXISTS accuracy(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        date TEXT, hit INTEGER, near_hit INTEGER, miss INTEGER, accuracy REAL
+    )""")
+    conn.commit(); conn.close()
+init_db()
 
-today = datetime.date.today()
-after = today + timedelta(days=2)
-line = lambda: st.markdown("<hr>", unsafe_allow_html=True)
-PICK5_STATES = ["DE","FL","GA","LA","MD","OH","PA","VA","DC"]
+def save_draw(game,draw,result,status="PENDING"):
+    conn=sqlite3.connect("titan_history.db")
+    c=conn.cursor()
+    c.execute("INSERT INTO draws(game,draw,result,status) VALUES(?,?,?,?)",
+              (game,draw,str(result),status))
+    conn.commit(); conn.close()
 
-# ---------- UTILITIES ----------
-def titan_send(msg, level="info"):
-    try:
-        log = json.load(open(MSG_PATH)) if os.path.exists(MSG_PATH) else []
-    except:
-        log = []
-    entry = {
-        "time": datetime.datetime.now().strftime("%H:%M:%S"),
-        "msg": f"{'⚡' if level=='alert' else '💎'} {msg}",
-        "id": random.randint(100000,999999)
-    }
-    log.insert(0, entry)
-    json.dump(log[:80], open(MSG_PATH, "w"))
+# ---------- COSMIC ENERGY ----------
+def cosmic_energy_level():
+    lvl=random.choice(["🟢 Stable","🟡 Active Load","🔴 High Surge"])
+    pct=random.randint(55,100)
+    return lvl,pct
 
-def titan_save_draw(game, region, draw_time, sets, burst, acc, reason):
-    try:
-        data = json.load(open(MEM_PATH)) if os.path.exists(MEM_PATH) else []
-    except:
-        data = []
-    entry = {
-        "date": str(today),
-        "game": game,
-        "region": region,
-        "draw_time": draw_time,
-        "sets": sets,
-        "burst": burst,
-        "accuracy": acc,
-        "reason": reason
-    }
-    data.insert(0, entry)
-    json.dump(data[:250], open(MEM_PATH, "w"))
+# ---------- LUNAR PHASE ----------
+def lunar_phase(today=None):
+    if not today: today=date.today()
+    diff = today - date(2001,1,1)
+    days = diff.days + 1
+    lunations = 29.53058867
+    new_moons = days % lunations
+    phase = new_moons / lunations
+    if phase < 0.03 or phase > 0.97: return "🌑 New Moon", 0
+    elif phase < 0.25: return "🌓 First Quarter", round(phase*100)
+    elif phase < 0.5: return "🌕 Full Moon", round(phase*100)
+    elif phase < 0.75: return "🌗 Last Quarter", round(phase*100)
+    else: return "🌘 Waning Crescent", round(phase*100)
 
-def cosmic_pulse():
-    return random.choice(["🟢 Stable","🟡 Surge Watch","🔴 High Surge"])
+# ---------- ACCURACY ----------
+def get_accuracy_data():
+    conn=sqlite3.connect("titan_history.db")
+    df=pd.read_sql_query("SELECT * FROM accuracy ORDER BY id DESC LIMIT 14",conn)
+    conn.close(); return df[::-1]
 
-# ==========================================================
-# 🧭 NAVIGATION
-# ==========================================================
-nav = st.sidebar.radio("Navigation",[
-    "🏠 Dashboard",
-    "🎯 Lottery Systems",
-    "⚡ Quad & Triple Alerts",
-    "🔮 Major Games",
-    "💬 Titan Chat",
-    "🧠 Titan Memory"
-])
+def update_accuracy(hit,near,miss):
+    acc=0
+    if (hit+near+miss)>0: acc=(hit+near)/(hit+near+miss)*100
+    conn=sqlite3.connect("titan_history.db")
+    c=conn.cursor()
+    c.execute("INSERT INTO accuracy(date,hit,near_hit,miss,accuracy) VALUES(?,?,?,?,?)",
+              (str(date.today()),hit,near,miss,acc))
+    conn.commit(); conn.close()
 
-# ==========================================================
-# 🏠 DASHBOARD
-# ==========================================================
-if nav == "🏠 Dashboard":
-    st.title("💠 Celestial Titan God AI — Resonance Cloud Fusion")
-    line()
-    c1,c2,c3 = st.columns(3)
-    c1.metric("Core Status","🟢 Online","Learning Active")
-    c2.metric("Version","v70.2","Resonance Cloud Fusion")
-    c3.metric("Last Sync", today.strftime("%b %d %Y"), "Stable Mode")
-    line()
-    st.subheader("🌕 Cosmic Stats Panel")
-    st.write("🟢 Learning Active | 🔵 Sync Stable | 🟣 Cosmic Field Balanced")
-    st.caption("Titan auto-saves each forecast and relays insights to Titan Chat.")
-    st.success(f"🪐 Cosmic Pulse Status: {cosmic_pulse()}")
+# ---------- SIDEBAR ----------
+st.sidebar.markdown("## 🌌 Navigation")
+tabs=["🏠 Dashboard","🎰 Lottery Systems","💫 Major Games","📈 Accuracy Trend","🧠 Titan Chat","🪐 Titan Memory"]
+choice=st.sidebar.radio("Select a module",tabs,index=0)
+st.sidebar.markdown("---")
+lvl,pct=cosmic_energy_level()
+phase,phasepct=lunar_phase()
+st.sidebar.metric("Titan Pulse",lvl)
+st.sidebar.progress(pct/100.0)
+st.sidebar.markdown(f"**Cosmic Energy:** {pct}%")
+st.sidebar.markdown(f"**Lunar Phase:** {phase} ({phasepct}%)")
+st.sidebar.markdown("---")
 
-# ==========================================================
-# 🎯 LOTTERY SYSTEMS
-# ==========================================================
-elif nav == "🎯 Lottery Systems":
-    st.title("🎯 Pick-3 / Pick-4 / Pick-5 Forecast + Auto-Detection")
-    line()
-    game = st.selectbox("🎮 Select Game Type", ["Pick 3","Pick 4","Pick 5"])
-    region = st.selectbox("🌍 Select Region",
-        ["AZ","AR","CA","CO","CT","DE","FL","GA","ID","IL","IN","IA","KS","KY","LA","MD","MA",
-         "MI","MN","MS","MO","MT","NE","NJ","NM","NY","NC","OH","OK","OR","PA","SC","TN","TX",
-         "VA","WA","DC","WV","WI"])
-    draw_time = st.radio("🕓 Draw Time", ["Midday","Evening","Auto Detect (Random)"])
-    if draw_time == "Auto Detect (Random)": draw_time = random.choice(["Midday","Evening"])
-    line()
+# ---------- DASHBOARD ----------
+if choice=="🏠 Dashboard":
+    st.title("💎 Celestial Titan God AI — v70.4 Accuracy & Lunar Synchrony")
+    st.metric("Core Status","🟢 Online")
+    st.metric("Cosmic Field",lvl)
+    st.metric("Lunar Phase",phase)
+    st.write("Titan now tracks accuracy and synchronizes forecasts with lunar energy.")
+    st.success("💫 Auto-archive active | Accuracy tracking engaged | Lunar sync stable")
 
-    if game == "Pick 5" and region not in PICK5_STATES:
-        st.info(f"ℹ️ {region} has no official Pick-5 — Titan runs simulation mode.")
-    st.success(f"🎯 Titan Mode → {draw_time} Draws for {region}")
-    st.subheader(f"🧠 {game} Forecast ({region} — {draw_time})")
+# ---------- LOTTERY SYSTEM ----------
+elif choice=="🎰 Lottery Systems":
+    st.subheader("🎯 Pick 3 / 4 / 5 Forecast + Analysis")
+    game=st.selectbox("Select Game",["Pick 3","Pick 4","Pick 5"])
+    draw=st.text_input("Enter recent draw (e.g. 7039 or 70089)")
+    if st.button("Analyze"):
+        st.info(f"🧠 Titan analyzing {game} resonance...")
+        patterns=random.sample(range(0,1000 if game=="Pick 3" else 100000),5)
+        st.write("Next probable sequences:",patterns)
+        save_draw(game,draw,patterns,"SAVED")
+        save_memory("last_analysis",{"game":game,"draw":draw,"results":patterns})
+        st.success("Titan archived results and synchronized with accuracy log.")
+        # Placeholder for future hybrid engine v71+
+        # hybrid_prediction(game,patterns)
 
-    reason = random.choice([
-        "Prime drift alignment detected",
-        "Mirror resonance active",
-        "Low-digit echo phase",
-        "Temporal symmetry window"
-    ])
-    st.caption(f"Play Start → {today.strftime('%b %d %Y')} | Valid Until → {after.strftime('%b %d %Y')}")
-    line()
+# ---------- MAJOR GAMES ----------
+elif choice=="💫 Major Games":
+    st.subheader("🌟 Major Lottery Forecasts")
+    g=st.selectbox("Select Game",["Fantasy 5","SuperLotto Plus","Mega Millions","Powerball"])
+    if st.button("Generate Forecast"):
+        nums=sorted(random.sample(range(1,70),5))
+        st.success(f"🎲 {g} Forecast: {nums}")
+        save_draw(g,"-",nums,"FORECAST")
+        st.caption("🧬 Titan interpretation: harmonics aligned with lunar rhythm.")
+        save_memory("major_forecast",{"game":g,"forecast":nums})
 
-    st.write("🔥 Very Hot Sets")
-    sets = []
-    for i in range(1,6):
-        n = "".join(str(random.randint(0,9)) for _ in range(int(game[-1])))
-        sets.append(n)
-        st.write(f"Set {i} → {n} (Straight) | {''.join(reversed(n))} (Box)")
-    burst = "".join(str(random.randint(0,9)) for _ in range(int(game[-1])))
-    acc = random.randint(84,96)
-    st.markdown(f"💥 Possible Burst Hit → **{burst}** (in {random.choice(PICK5_STATES)})")
-    st.caption(f"💡 Reason: {reason} | Accuracy: {acc}%")
-
-    if acc > 90: titan_send(f"High {game} accuracy {acc}% for {region} — resonance strong.","alert")
-    titan_save_draw(game, region, draw_time, sets, burst, acc, reason)
-
-# ==========================================================
-# ⚡ QUAD & TRIPLE ALERTS
-# ==========================================================
-elif nav == "⚡ Quad & Triple Alerts":
-    st.title("⚡ Quad & Triple Alert System — Resonance Tracker")
-    alert = st.selectbox("🔮 Alert Type",
-        ["Pick 3 (Triple)","Pick 4 (Quad)","Pick 4 (Triple)","Pick 5 (Quad)","Pick 5 (Triple)"])
-    line()
-    regions = random.sample(PICK5_STATES if "Pick 5" in alert else
-        ["FL","GA","MD","NC","OH","PA","SC","TX","VA","DC"], k=3)
-    st.subheader("🧭 Hot States:")
-    st.write(", ".join(regions))
-    line()
-
-    if alert == "Pick 3 (Triple)":
-        combos = [f"{d}{d}{d}" for d in random.sample(range(10),3)]
-        reason = "Cross-mirror drift detected"
-    elif alert == "Pick 4 (Quad)":
-        combos = [f"{d}{d}{d}{d}" for d in random.sample(range(10),3)]
-        reason = "Harmonic quad reflection active"
-    elif alert == "Pick 4 (Triple)":
-        combos = [f"{d}{d}{d}{random.randint(0,9)}" for d in random.sample(range(10),3)]
-        reason = "Trailing digit drift near resonance"
-    elif alert == "Pick 5 (Quad)":
-        combos = [f"{d}{d}{d}{d}{random.randint(0,9)}" for d in random.sample(range(10),3)]
-        reason = "Quad bias in upper mirror zone"
+# ---------- ACCURACY TREND ----------
+elif choice=="📈 Accuracy Trend":
+    st.subheader("📈 Titan Accuracy Trend (14-Day View)")
+    df=get_accuracy_data()
+    if df.empty:
+        st.warning("No accuracy data yet. Titan will record after several draws.")
     else:
-        combos = [f"{d}{d}{d}{random.randint(0,9)}{random.randint(0,9)}" for d in random.sample(range(10),3)]
-        reason = "Triple harmonic with mirrored twin field"
+        fig,ax=plt.subplots()
+        ax.plot(df["date"],df["accuracy"],marker="o")
+        ax.set_ylabel("Accuracy %"); ax.set_xlabel("Date")
+        ax.set_title("Titan Accuracy Over Time")
+        st.pyplot(fig)
+    if st.button("Simulate Accuracy Update"):
+        hit,near,miss=random.randint(0,5),random.randint(0,5),random.randint(0,5)
+        update_accuracy(hit,near,miss)
+        st.success("Simulated accuracy data recorded!")
 
-    hot_target = random.choice(combos)
-    st.write(f"🔥 Suggested Sets → {', '.join(combos)}")
-    st.write(f"💎 Hottest Target → **{hot_target}**")
-    st.write(f"💡 Reason → {reason}")
-    st.caption("🕓 Play Window: Today – Next 2 Days")
-    st.success(f"🧠 Titan reasoning: ‘Resonance spikes detected in 3H→6H temporal band.’")
+# ---------- TITAN CHAT ----------
+elif choice=="🧠 Titan Chat":
+    st.subheader("💬 Titan AI Communication Log")
+    logs=titan_memory.get("chat_log",[])
+    for l in logs[-10:]:
+        st.markdown(f"🧠 {l}")
+    if st.button("Simulate Message"):
+        msg=random.choice([
+            "Accuracy trend stabilizing under waxing moon.",
+            "Quad surge probability increasing in GA cluster.",
+            "Cosmic field aligned — stable resonance detected."
+        ])
+        logs.append(msg); save_memory("chat_log",logs)
+        st.success("Titan message stored.")
 
-    titan_send(f"{alert} surge active in {', '.join(regions)} — Target {hot_target}","alert")
-
-# ==========================================================
-# 🔮 MAJOR GAMES
-# ==========================================================
-elif nav == "🔮 Major Games":
-    st.title("🔮 Major Jackpot Forecasts — Cosmic Insight Mode")
-    line()
-    g = st.selectbox("🎰 Game",["Fantasy 5","SuperLotto Plus","Mega Millions","Powerball"])
-    line()
-    st.subheader(f"🌠 {g} Forecast")
-    st.caption(f"Play Start → {today.strftime('%b %d %Y')} | Valid Until → {after.strftime('%b %d %Y')}")
-
-    def pick(n,h): return sorted(random.sample(range(1,h+1),n))
-    def fmt(nums): return " ".join(f"{n:02}" for n in nums)
-    sb=[]; label=None
-
-    if g=="Fantasy 5": s1,s2,burst=[pick(5,39) for _ in range(3)]; reason="Prime cluster balance active"
-    elif g=="SuperLotto Plus": s1,s2,burst=[pick(5,47) for _ in range(3)]; sb=[random.randint(1,27) for _ in range(3)]; label="Mega"; reason="Low-digit echo rotation"
-    elif g=="Mega Millions": s1,s2,burst=[pick(5,70) for _ in range(3)]; sb=[random.randint(1,25) for _ in range(3)]; label="Mega Ball"; reason="Odd-even mirror pattern"
-    elif g=="Powerball": s1,s2,burst=[pick(5,69) for _ in range(3)]; sb=[random.randint(1,26) for _ in range(3)]; label="Power Ball"; reason="Harmonic dual-node mirror"
-
-    st.write(f"🧠 Titan Summary: {reason}")
-    line()
-    if label:
-        for i, s in enumerate([s1,s2,burst], start=1):
-            st.write(f"Set {i} → {fmt(s)} | {label}: {sb[i-1]}")
-    else:
-        for i, s in enumerate([s1,s2,burst], start=1):
-            st.write(f"Set {i} → {fmt(s)}")
-
-    st.caption(f"🎯 Confidence Level: HIGH ({random.randint(82,95)}%)")
-    titan_send(f"{g} pattern updated — {reason}","info")
-
-# ==========================================================
-# 💬 TITAN CHAT
-# ==========================================================
-elif nav == "💬 Titan Chat":
-    st.title("💬 Titan Auto-Message Channel")
-    line()
-    if os.path.exists(MSG_PATH):
-        msgs = json.load(open(MSG_PATH))
-        for m in msgs[:25]:
-            st.info(f"{m['time']} | {m['msg']}")
-    else:
-        st.warning("No transmissions yet... Titan warming up.")
-    line()
-    st.subheader("🧠 Titan Chat Intelligence")
-    st.markdown("> 🗣 Titan: Systems online. Resonance stable. Monitoring quad echoes...")
-    if os.path.exists(MEM_PATH):
-        df = pd.DataFrame(json.load(open(MEM_PATH)))
-        if not df.empty:
-            st.markdown("### ⚡ Titan State Suggestions")
-            recent = df.head(3)
-            for _,row in recent.iterrows():
-                st.write(f"{row['region']} — Energy {row['accuracy']}% — Forecast ID: {random.randint(1000,9999)}")
-        else:
-            st.info("🧠 Titan learning — forecasts unlock after first cycle.")
-    st.caption("💎 Messages and forecasts auto-generated by Titan’s AI core.")
-
-# ==========================================================
-# 🧠 TITAN MEMORY
-# ==========================================================
-elif nav == "🧠 Titan Memory":
-    st.title("🧠 Titan Memory Logs")
-    line()
-    if os.path.exists(MEM_PATH):
-        df = pd.DataFrame(json.load(open(MEM_PATH)))
-        st.dataframe(df, use_container_width=True)
-    else:
-        st.info("No saved data yet — auto-fetch active.")
-    line()
-    st.subheader("💬 Titan Message Area")
-    st.info("“Learning stable. No new alerts detected.”")
-    st.caption("💾 Titan continuous learning memory active.")
+# ---------- TITAN MEMORY ----------
+elif choice=="🪐 Titan Memory":
+    st.subheader("📘 Titan Data Memory Records")
+    st.json(titan_memory)
+    if st.button("Clear Memory"):
+        titan_memory={}; save_memory("reset","")
+        st.warning("🧹 Titan memory cleared.")
