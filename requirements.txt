@@ -5,4 +5,4 @@
 streamlit==1.39.0
 pandas==2.2.2
 requests==2.32.3
-rich==14.2.0
+rich==13.7.1
