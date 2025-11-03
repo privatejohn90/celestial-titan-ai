@@ -8,8 +8,8 @@ from datetime import date
 from titan_core.titan_chat import titan_reply
 from titan_core.quad_analyzer import analyze_quads
 from titan_core.triple_detector import detect_triples
-from titan_core.forecast_engine import generate_forecast
 from titan_core.titan_db import init_db, save_draw, check_hit_status
+from titan_core.cosmic_engine import get_cosmic_energy
 
 st.sidebar.markdown("### 💫 Celestial Titan God AI v70.3")
 st.sidebar.caption("Core modules: Chat, Quad, Triple, DB, Cosmic Engine")
