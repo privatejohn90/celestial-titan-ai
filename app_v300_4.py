@@ -111,28 +111,46 @@ ph_games={
     "PH STL Game":["10:30AM","3PM","7PM"]
 }
 
-# 🔮 Generator
-def generate_numbers(game,num_sets=5):
-    sets=[]
-    for _ in range(num_sets):
-        if "Pick 3" in game: nums=[random.randint(0,9) for _ in range(3)]
-        elif "Pick 4" in game: nums=[random.randint(0,9) for _ in range(4)]
-        elif "Pick 5" in game and "Fantasy" not in game: nums=[random.randint(0,9) for _ in range(5)]
-        elif "Fantasy 5" in game: nums=sorted(random.sample(range(1,40),5))   # ✅ 1-39 only
-        elif "SuperLotto" in game:
-            nums=sorted(random.sample(range(1,48),5)); nums.append(random.randint(1,27))
-        elif "Mega Millions" in game:
-            nums=sorted(random.sample(range(1,71),5)); nums.append(random.randint(1,25))
-        elif "Powerball" in game:
-            nums=sorted(random.sample(range(1,70),5)); nums.append(random.randint(1,26))
-        elif "3D" in game: nums=[random.randint(0,9) for _ in range(3)]
-        elif "4D" in game: nums=[random.randint(0,9) for _ in range(4)]
-        elif "STL" in game: nums=[random.randint(0,9) for _ in range(3)]
-        else: nums=[random.randint(0,9) for _ in range(3)]
-        conf=round(random.uniform(90,99.99),2)
-        sets.append({"numbers":nums,"confidence":conf})
-    return sets
+# 🔮 Generator — Fixed with Timestamp Integration
+def generate_numbers(game, num_sets=5):
+    sets = []
+    now = datetime.datetime.now().strftime("%B %d, %Y %I:%M %p")  # Date + Time
 
+    for _ in range(num_sets):
+        if "Pick 3" in game:
+            nums = [random.randint(0, 9) for _ in range(3)]
+        elif "Pick 4" in game:
+            nums = [random.randint(0, 9) for _ in range(4)]
+        elif "Pick 5" in game and "Fantasy" not in game:
+            nums = [random.randint(0, 9) for _ in range(5)]
+        elif "Fantasy 5" in game:
+            nums = sorted(random.sample(range(1, 40), 5))
+        elif "SuperLotto" in game:
+            nums = sorted(random.sample(range(1, 48), 5))
+            nums.append(random.randint(1, 27))
+        elif "Mega Millions" in game:
+            nums = sorted(random.sample(range(1, 71), 5))
+            nums.append(random.randint(1, 25))
+        elif "Powerball" in game:
+            nums = sorted(random.sample(range(1, 70), 5))
+            nums.append(random.randint(1, 26))
+        elif "3D" in game:
+            nums = [random.randint(0, 9) for _ in range(3)]
+        elif "4D" in game:
+            nums = [random.randint(0, 9) for _ in range(4)]
+        elif "STL" in game:
+            nums = [random.randint(0, 9) for _ in range(3)]
+        else:
+            nums = [random.randint(0, 9) for _ in range(3)]
+
+        conf = round(random.uniform(90, 99.99), 2)
+        sets.append({
+            "numbers": nums,
+            "confidence": conf,
+            "generated_at": now
+        })
+
+    return sets
 # 📜 Display + Save
 def show_forecast(game,forecasts,draw_time):
     date=datetime.date.today().strftime("%B %d, %Y")
