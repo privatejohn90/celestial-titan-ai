@@ -226,7 +226,7 @@ def log_titan_accuracy(result_game, result_number):
     else:
         return f"❌ No match found. Accuracy recorded as {acc_percent}%"
 
-# ================================================================
+   # ================================================================
 # 🧠 Titan Accuracy Analyzer + Official Result Checker (v300.9-FXR9 Safe)
 # ================================================================
 st.markdown("---")
@@ -239,16 +239,19 @@ with st.expander("🧩 Log Official Result & Analyze Accuracy", expanded=False):
         placeholder="e.g., GA Pick 3 Midday",
         key="fxr9_game_name"
     )
+
     result_number = st.text_input(
         "🏆 Official Result Number(s)",
         placeholder="e.g., 557 or 12 24 36 38 41",
         key="fxr9_result_number"
     )
 
+    # ✅ Added timestamp when logging accuracy
     if st.button("⚡ Run Titan Accuracy Log", key="fxr9_run_button"):
         if result_game and result_number:
             msg = log_titan_accuracy(result_game, result_number)
-            st.success(msg)
+            timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            st.success(f"{msg}\n🕓 Recorded on: {timestamp}")
         else:
             st.warning("⚠️ Please provide both game and result number.")
 
@@ -261,9 +264,9 @@ with st.expander("📊 View Titan Accuracy Logs", expanded=False):
         for g, entries in list(accuracy.items())[-5:]:
             last = entries[-1]
             st.markdown(
-                f"🎯 **{g}** — {last['result']} | Accuracy: `{last['accuracy']}%`"
+                f"🎯 **{g}** — {last['result']} | Accuracy: `{last['accuracy']}%` | 🕓 {last.get('date', 'Unknown')}"
             )
-
+            
 # =============================================================
 # 🎮 Titan Result Input Box (Old Forecast Section — Fixed)
 # =============================================================
@@ -412,9 +415,10 @@ with st.expander("🌌 Titan Forecast + Auto-Tag", expanded=False):
         forecasts = generate_numbers(tag_game, num_sets)
         data = load_json(FORECAST_FILE, {})
         data.setdefault(tag_game, []).append({
-            "date": draw_date,
-            "draw_type": draw_type,
-            "forecasts": forecasts
+             "date": datetime.today().strftime("%Y-%m-%d"),
+             "saved_time": datetime.now().strftime("%H:%M:%S"),
+             "draw_type": draw_type,
+             "forecasts": forecasts
         })
         save_json(FORECAST_FILE, data)
         st.success(f"✅ Forecast saved for {tag_game} ({draw_type})")
